@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake Game Python</title>
+    <script src="https://tailwindcss.com"></script>
+
+</head>
+<body class="bg-gray-900 flex flex-col items-center justify-center h-screen">
+    <h1 class="text-white text-4xl font-bold mb-4">Snake Game</h1>
+    <div class="relative">
+        <canvas id="gameCanvas" width="400" height="400" class="border-4 border-blue-500 rounded-lg"></canvas>
+    </div>
+    <p class="text-gray-400 mt-4 text-lg">Điểm: <span id="score">0</span></p>
+    <button onclick="location.reload()" class="mt-4 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-bold">Chơi lại</button>
+<script src="{{ url_for('static', filename='js/snake.js') }}"></script>
+</body>
+</html>

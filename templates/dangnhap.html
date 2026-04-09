@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dang nhap</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h2>Đăng nhập hệ thống</h2>
+<a href="{{ url_for('main.login_google') }}"
+   class="block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4">
+    Đăng nhập bằng Google
+</a>
+<form method="POST">
+    Tên đăng nhập: <input type="text" name="username"><br><br>
+    Mật khẩu: <input type="password" name="password"><br><br>
+    <input type="submit" value="Đăng nhập">
+
+</form>
+<p><a href="/dangky">Chưa có tài khoản? Đăng ký ngay</a></p>
+</body>
+</html>
