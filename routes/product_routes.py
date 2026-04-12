@@ -3,7 +3,8 @@ import os
 from flask import Blueprint, jsonify, request
 from werkzeug.utils import secure_filename
 
-from models import Products, db  # Import model và db từ file models của bạn
+from models.db_model import db
+from models.products_model import Products
 from utils import convert_to_list, token_required, delete_physical_files, upload_multiple_files
 
 # Khởi tạo Blueprint cho Product
@@ -11,7 +12,7 @@ product_bp = Blueprint('product_bp', __name__)
 
 
 @product_bp.route('/create', methods=['POST'])
-@token_required
+# @token_required
 def create_product(current_user):
     files = request.files.getlist('img')
     list_filenames = []
@@ -31,15 +32,18 @@ def create_product(current_user):
             color=convert_to_list('color'),
             price=request.form.get('price'),
             categories=request.form.get('categories'),
-            user_id=current_user.id
+            # user_id=current_user.id,
+            user_id=1
         )  # Kết thúc bằng dấu )
         db.session.add(new_product)
         db.session.commit()
 
         product_data = new_product.to_dict()
         product_data['user_created'] = {
-            'user_id': current_user.id,
-            'username': current_user.username
+            # 'user_id': current_user.id,
+            # 'username': current_user.username
+            'user_id': 1,
+            'username': 'thuan'
         }
         return jsonify(product_data), 201
     except ValueError as e:
@@ -81,7 +85,7 @@ def get_product_by_id(id):
     product_data = product.to_dict()
 
     if 'user_created' not in product_data:
-        from models import User
+        from models.user_model import User
         user = User.query.get(product.user_id)
         if user:
             product_data['user_created'] = {

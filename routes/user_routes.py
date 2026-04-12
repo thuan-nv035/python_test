@@ -3,14 +3,18 @@ import datetime
 import os
 
 import jwt
-from flask import Blueprint, request, current_app, jsonify, render_template
+from flask import Blueprint, request, current_app, jsonify, render_template, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
-from models import User, db
-from routes.routes import SERVER_URL
+from models.db_model import db
+from models.user_model import User
+from oauth_config import google
+from utils import token_required
 
 user_bp = Blueprint('user_bp', __name__)
+
+server_url = os.getenv('SERVER_URL')
 
 
 @user_bp.route('/dangky', methods=['GET', 'POST'])
@@ -22,7 +26,7 @@ def dang_ky():
             file = request.files.get('avatar')
             fileName = None
             if file:
-                fileName = f"{SERVER_URL}/static/uploads/{file.filename}"
+                fileName = f"{server_url}/static/uploads/{file.filename}"
                 name = secure_filename(file.filename)
                 file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], name))
             newUser = User(
@@ -69,7 +73,7 @@ def dang_nhap():
         if user and check_password_hash(user.password, pass_word):
             token = jwt.encode({
                 'user_id': user.id,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+                'exp': datetime.datetime.now() + datetime.timedelta(hours=24)
             }, current_app.config['SECRET_KEY'], algorithm='HS256')
 
             return jsonify({
@@ -81,3 +85,34 @@ def dang_nhap():
             return jsonify({"error": "Sai ten hoac mat khau"}), 401
 
     return render_template('dangnhap.html')
+
+
+@user_bp.route('/login/google')
+def login_google():
+    redirect_uri = url_for('main.auth_callback', _external=True)
+    print('redirect', redirect_uri)
+    return google.authorize_redirect(redirect_uri)
+
+
+@user_bp.route('/auth/callback')
+def auth_callback():
+    try:
+        # Thêm timeout và kiểm tra token
+        token = google.authorize_access_token()
+        user_info = token.get('userinfo')
+        session['user'] = user_info
+        return f"Chào {user_info['name']}!"
+    except Exception as e:
+        # Nếu lỗi JSON, in ra nội dung phản hồi để xem lỗi từ Google
+        print(f"Lỗi xảy ra: {str(e)}")
+        return "Lỗi xác thực. Hãy kiểm tra Console trong PyCharm để biết chi tiết."
+
+
+@user_bp.route('/info', methods=['GET'])
+@token_required
+def get_user_info(current_user):
+    return jsonify({
+        'id': current_user.id,
+        'username': current_user.username,
+        'status': 'hihi'
+    })
