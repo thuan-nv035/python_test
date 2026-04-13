@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 
-from models.score_model import Score
-from models.db_model import db
+from models import Score, db
 
 game_bp = Blueprint('game_bp', __name__)
 

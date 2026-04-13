@@ -70,7 +70,7 @@ def delete_physical_files(image_links):
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        from models.user_model import User
+        from models import User
         token = None
         if 'Authorization' in request.headers:
             auth_header = request.headers['Authorization']

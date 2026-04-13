@@ -7,8 +7,7 @@ from flask import Blueprint, request, current_app, jsonify, render_template, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
-from models.db_model import db
-from models.user_model import User
+from models import db, User
 from oauth_config import google
 from utils import token_required
 
