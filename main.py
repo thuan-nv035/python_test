@@ -3,6 +3,7 @@ from models import db
 from routes.product_routes import product_bp
 from routes.user_routes import user_bp
 from routes.game_routes import game_bp
+from routes.cart_routes import cart_bp
 from oauth_config import oauth
 import os
 
@@ -12,6 +13,7 @@ app = Flask(__name__)
 app.register_blueprint(product_bp, url_prefix='/api/products')
 app.register_blueprint(user_bp, url_prefix='/api/user')
 app.register_blueprint(game_bp, url_prefix='/api/game')
+app.register_blueprint(cart_bp, url_prefix='/api/cart')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:10052000@localhost:5432/test1'
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 app.secret_key = os.getenv('SECRET_KEY')

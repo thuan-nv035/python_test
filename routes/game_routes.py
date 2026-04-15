@@ -5,6 +5,11 @@ from models import Score, db
 game_bp = Blueprint('game_bp', __name__)
 
 
+@game_bp.route('')
+def game_snake():
+    return render_template('snake.html')
+
+
 @game_bp.route('/save-score', methods=['POST'])
 def save_score():
     data = request.get_json()

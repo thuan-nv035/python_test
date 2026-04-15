@@ -60,7 +60,6 @@ def get_product():
         per_page=per_page,
         error_out=False
     )
-
     # 2. Chuyển danh sách đối tượng thành danh sách Dictionary
     products_list = [p.to_dict() for p in pagination.items]
 
@@ -81,7 +80,7 @@ def get_product_by_id(id):
     product_data = product.to_dict()
 
     if 'user_created' not in product_data:
-        from models.user_model import User
+        from models import User
         user = User.query.get(product.user_id)
         if user:
             product_data['user_created'] = {
