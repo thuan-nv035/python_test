@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from email.policy import default
 from functools import wraps
 
 import jwt
@@ -113,15 +114,21 @@ class Cart(db.Model):
     __tablename__ = 'cart'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(100), nullable=False)
-    products = db.relationship('CartProduct', backref='cart', lazy=True)
-    # Tương đương {timestamps: true}
+    product_id = db.Column(db.String(100), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     def to_dict(self):
-        data = {c.name: getattr(self, c.name) for c in self.__table__.columns}
-        data['created_at'] = format_date(self.created_at) if self.created_at else None
-        data['updated_at'] = format_date(self.created_at) if self.created_at else None
-        data['products'] = [p.to_dict() for p in self.products]
+        return {
+            "id": self.id,
+            "product_id": self.product_id,
+            "quantity": self.quantity
+        }
 
-        return data
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())

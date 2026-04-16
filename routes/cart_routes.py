@@ -44,18 +44,15 @@ def get_all_cart(current_user):
 @token_required
 def create_cart(current_user):
     data = request.get_json()
+    user_id = current_user.id
+    product_id = data.get('product_id')
+    quantity = data.get('quantity', 1)
+    item = Cart.query.filter_by(user_id=user_id, product_id=product_id).first()
 
-    data_product = data.pop('products', [])
-
-    new_cart = Cart(**data)
-    try:
-        for item in data_product:
-            child = CartProduct(**item)
-            new_cart.products.append(child)
-        db.session.add(new_cart)
-        db.session.commit()
-
-        return jsonify(new_cart.to_dict()), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)})
+    if item:
+        item.quantity += quantity
+    else:
+        item = Cart(user_id=user_id, product_id=product_id, quantity=quantity)
+        db.session.add(item)
+    db.session.commit()
+    return jsonify({'da them vao gio hang'}), 201

@@ -3,7 +3,6 @@ from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 
 load_dotenv()
-
 oauth = OAuth()
 
 # Định nghĩa biến google ở đây để các file khác có thể import

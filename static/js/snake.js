@@ -39,8 +39,8 @@ function draw() {
     // Kiểm tra đâm tường hoặc đâm vào thân
     if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400) {
     guiDiemLenServer(score); // Gọi hàm gửi điểm
-    alert("Game Over! Điểm: " + score);
-//    location.reload();
+//    alert("Game Over! Điểm: " + score);
+    location.reload();
     }
 }
 
