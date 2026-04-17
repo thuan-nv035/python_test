@@ -1,15 +1,7 @@
-#!/usr/bin/env python
-# Author: Aaron Nech
-# Description: Scrapes a sub directory of http://www.indiabix.com
-#  And extracts question and answers in json format.
-
-import os, sys
 import argparse
-import requests
 import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
-
 
 # Helper functions
 def is_letter(s):

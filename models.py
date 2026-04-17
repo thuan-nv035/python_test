@@ -132,3 +132,11 @@ class Message(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+
+class Seat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    seat_code = db.Column(db.String(10), unique=True, nullable=False)
+    is_booked = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, nullable=True)
+    status = db.Column(db.String(20), default='available')  # available, reserved, booked
