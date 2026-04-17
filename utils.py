@@ -4,8 +4,6 @@ from functools import wraps
 
 import jwt
 from flask import request, jsonify, current_app
-from werkzeug.utils import secure_filename
-from requests import session
 
 
 # Hàm xử lý chuỗi từ form-data sang mảng
