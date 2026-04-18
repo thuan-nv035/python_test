@@ -5,6 +5,7 @@ from functools import wraps
 import jwt
 from flask import current_app, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import validates
 
@@ -140,3 +141,26 @@ class Seat(db.Model):
     is_booked = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, nullable=True)
     status = db.Column(db.String(20), default='available')  # available, reserved, booked
+
+
+class Question(db.Model):
+    __tablename__ = 'question'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    option_a = db.Column(db.String(255), nullable=False)
+    option_b = db.Column(db.String(255), nullable=False)
+    option_c = db.Column(db.String(255), nullable=False)
+    option_d = db.Column(db.String(255), nullable=False)
+    correct_answer = db.Column(db.String(1), nullable=False)
+    difficulty_level = db.Column(db.Integer, nullable=False)  # tu 1 - 15
+    status = db.Column(db.String(20), default='active')
+
+
+class GameSession(db.Model):
+    __tablename__ = 'game_session'
+    id = db.Column(db.Integer, primary_key=True)
+    player_name = db.Column(db.String(50), nullable=False)
+    current_level = db.Column(db.Integer, default=1)
+    is_finished = db.Column(db.Boolean, default=False)
+    total_prize = db.Column(db.Integer, default=0)
+    timestamp = db.Column(db.DateTime, default=func.current_timestap())
